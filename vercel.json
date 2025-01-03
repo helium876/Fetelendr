@@ -1,0 +1,46 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Server",
+          "value": "Server"
+        },
+        {
+          "key": "X-Powered-By",
+          "value": ""
+        },
+        {
+          "key": "x-vercel-cache",
+          "value": ""
+        },
+        {
+          "key": "x-vercel-id",
+          "value": ""
+        },
+        {
+          "key": "x-vercel",
+          "value": ""
+        },
+        {
+          "key": "x-vercel-deployment-url",
+          "value": ""
+        },
+        {
+          "key": "x-zeit-id",
+          "value": ""
+        },
+        {
+          "key": "x-zeit",
+          "value": ""
+        },
+        {
+          "key": "x-now",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "cleanUrls": true
+} 
