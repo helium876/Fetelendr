@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from '@/components/Footer';
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,11 +25,15 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  themeColor: "#4C1D95",
-  viewport: "width=device-width, initial-scale=1",
   icons: {
     icon: "/favicon.ico",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#4C1D95",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

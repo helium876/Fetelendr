@@ -27,7 +27,7 @@ export default function Footer() {
                     alt="ALV Logo"
                     width={70}
                     height={70}
-                    className="object-contain opacity-90"
+                    className="object-contain opacity-90 w-auto h-auto"
                     priority
                   />
                 </Link>
