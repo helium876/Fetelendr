@@ -162,7 +162,20 @@ export default function Home() {
 
         return true;
       })
-      .sort((a, b) => new Date(a.date + 'T12:00:00').getTime() - new Date(b.date + 'T12:00:00').getTime());
+      .sort((a, b) => {
+        const dateA = new Date(a.date + 'T12:00:00');
+        const dateB = new Date(b.date + 'T12:00:00');
+        const now = new Date();
+        const isPastA = dateA < now;
+        const isPastB = dateB < now;
+
+        // If one is past and one is future, show future first
+        if (isPastA && !isPastB) return 1;
+        if (!isPastA && isPastB) return -1;
+
+        // If both are past or both are future, sort by date
+        return dateA.getTime() - dateB.getTime();
+      });
   }, [events, selectedMonth, selectedYear, selectedCategory, searchQuery]);
 
   // Memoize the visible events for the current page

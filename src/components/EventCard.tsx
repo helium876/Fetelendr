@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, isPast } from 'date-fns';
 import Image from 'next/image';
 import { Event } from '@/types/event';
 import { CalendarIcon, MapPinIcon, TicketIcon } from '@heroicons/react/20/solid';
@@ -39,7 +39,7 @@ export default function EventCard({ event, priority = false, onSelectAction }: E
 
   return (
     <div 
-      className="group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden min-w-[280px] cursor-pointer"
+      className={`group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden min-w-[280px] cursor-pointer ${isPast(parseISO(event.date)) ? 'grayscale' : ''}`}
       onClick={() => onSelectAction(event)}
     >
       {/* Shine Effect */}
