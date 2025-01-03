@@ -512,7 +512,7 @@ export default function Home() {
               <EventCard 
                 key={event.id} 
                 event={event}
-                onSelectAction={() => {}} // No action needed for now
+                onSelectAction={handleSearchSelect}  // Enable event modal on click
               />
             ))}
           </div>
