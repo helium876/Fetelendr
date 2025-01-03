@@ -1,35 +1,19 @@
-import { NextResponse } from 'next/server';
 import { getEvents } from '@/lib/sheets';
+import { logger } from '@/lib/logger';
 
 export async function GET() {
   try {
-    console.log('API route called');
+    logger.log('API route called');
     const events = await getEvents();
-    console.log('Events fetched from sheets:', events.length);
-    console.log('Sample event:', events[0]);
-    
-    const response = NextResponse.json({ success: true, data: events });
-    
-    // Remove server information
-    response.headers.delete('x-powered-by');
-    response.headers.set('server', 'Server');
-    
-    return response;
+    logger.log('Events fetched from sheets:', events.length);
+    logger.log('Sample event:', events[0]);
+
+    return Response.json({ success: true, data: events });
   } catch (error) {
-    console.error('Error in events API:', {
-      error: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined
+    logger.error('Error in events API:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      error
     });
-    
-    const errorResponse = NextResponse.json(
-      { success: false, error: 'Failed to fetch events' },
-      { status: 500 }
-    );
-    
-    // Apply same headers to error responses
-    errorResponse.headers.delete('x-powered-by');
-    errorResponse.headers.set('server', 'Server');
-    
-    return errorResponse;
+    return Response.json({ success: false, error: 'Failed to fetch events' }, { status: 500 });
   }
 } 

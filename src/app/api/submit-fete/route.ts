@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
 import { Readable } from 'stream';
+import { logger } from '@/lib/logger';
 
 // Keep track of IP submissions (in-memory rate limiting)
 const ipSubmissions: { [key: string]: { count: number; lastSubmission: number } } = {};
@@ -160,8 +161,8 @@ export async function POST(request: Request) {
           posterUrl = uploadResponse.data.webContentLink || 'TBA';
         }
       } catch (uploadError) {
-        console.error('File upload error:', uploadError);
-        // Continue with form submission even if file upload fails
+        logger.error('File upload error:', uploadError);
+        return Response.json({ success: false, error: 'Failed to upload file' }, { status: 500 });
       }
     }
 
@@ -197,7 +198,7 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } catch (error) {
-    console.error('Submission error:', error);
+    logger.error('Submission error:', error);
     return NextResponse.json(
       { error: 'Failed to process submission' },
       { status: 500 }

@@ -7,6 +7,7 @@ import FeaturedEvents from '@/components/FeaturedEvents';
 import { format, getMonth, getYear, isToday, parseISO } from 'date-fns';
 import EventSkeleton from '@/components/EventSkeleton';
 import EventModal from '@/components/EventModal';
+import { logger } from '@/lib/logger';
 
 const months = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -21,7 +22,7 @@ const shortMonths = [
 export default function Home() {
   const today = new Date();
   const currentYear = getYear(today);
-  console.log('Initial date values:', {
+  logger.log('Initial date values:', {
     today: today.toISOString(),
     currentYear,
     currentMonth: getMonth(today),
@@ -92,12 +93,12 @@ export default function Home() {
           timestamp: Date.now()
         }));
       } catch (err) {
-        console.warn('Failed to cache events data:', err);
+        logger.warn('Failed to cache events data:', err);
       }
 
       return result.data;
     } catch (error) {
-      console.error('Error fetching events:', error);
+      logger.error('Error fetching events:', error);
       throw error;
     }
   }, []);
@@ -246,27 +247,27 @@ export default function Home() {
   useEffect(() => {
     async function loadEvents() {
       try {
-        console.log('Fetching events from API...');
+        logger.log('Fetching events from API...');
         const response = await fetch('/api/events');
         if (!response.ok) throw new Error('Failed to fetch events');
         
         const result = await response.json();
-        console.log('API Response:', result);
+        logger.log('API Response:', result);
         
         if (!result.success) {
           throw new Error(result.error || 'Failed to load events');
         }
         
         if (result.data) {
-          console.log('Raw events data:', result.data);
-          console.log('Events with dates:', result.data.map((e: Event) => ({ title: e.title, date: e.date })));
+          logger.log('Raw events data:', result.data);
+          logger.log('Events with dates:', result.data.map((e: Event) => ({ title: e.title, date: e.date })));
           
           // Extract unique types from all events
           const allTypes = new Set<string>();
           result.data.forEach((event: Event) => {
             event.type.forEach(type => allTypes.add(type.toLowerCase()));
           });
-          console.log('Found event types:', Array.from(allTypes));
+          logger.log('Found event types:', Array.from(allTypes));
 
           // Create categories from unique types
           const newCategories = [
@@ -276,13 +277,13 @@ export default function Home() {
               label: type.charAt(0).toUpperCase() + type.slice(1)
             }))
           ];
-          console.log('Created categories:', newCategories);
+          logger.log('Created categories:', newCategories);
 
           setCategories(newCategories);
           setEvents(result.data);
         }
       } catch (err) {
-        console.error('Error fetching events:', err);
+        logger.error('Error fetching events:', err);
         setError(err instanceof Error ? err.message : 'Failed to load events');
         setEvents([]);
       } finally {

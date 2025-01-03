@@ -3,6 +3,7 @@ import { Event } from '@/types/event';
 import { format, parseISO, isValid } from 'date-fns';
 import Image from 'next/image';
 import { Modal } from '@/components/Modal';
+import { logger } from '@/lib/logger';
 
 interface EventModalProps {
   event: Event;
@@ -40,32 +41,29 @@ export default function EventModal({ event, isOpen, onClose }: EventModalProps) 
     };
   }, [isOpen, onClose]);
 
-  const handleImageError = (error: any) => {
-    console.error('Modal image failed to load:', {
+  const handleImageError = () => {
+    logger.error('Modal image failed to load:', {
       url: event.poster,
-      error: error.message,
-      event: event.title
+      title: event.title
     });
     setImageError(true);
+    setImageLoaded(false);
   };
 
   const handleImageLoad = () => {
-    console.log('Modal image loaded successfully:', {
+    logger.log('Modal image loaded successfully:', {
       url: event.poster,
-      event: event.title
+      title: event.title
     });
     setImageLoaded(true);
+    setImageError(false);
   };
 
-  const formatDate = (dateStr: string): string => {
+  const formatDate = (dateStr: string) => {
     try {
-      const date = parseISO(dateStr);
-      if (isValid(date)) {
-        return format(date, 'EEEE, MMMM d, yyyy');
-      }
-      return dateStr;
+      return format(parseISO(dateStr), 'EEEE, MMMM d, yyyy');
     } catch (error) {
-      console.error('Error formatting date:', error);
+      logger.error('Error formatting date:', error);
       return dateStr;
     }
   };

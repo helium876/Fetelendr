@@ -5,6 +5,7 @@ import { format, parseISO, isPast } from 'date-fns';
 import Image from 'next/image';
 import { Event } from '@/types/event';
 import { CalendarIcon, MapPinIcon, TicketIcon } from '@heroicons/react/20/solid';
+import { logger } from '@/lib/logger';
 
 interface EventCardProps {
   event: Event;
@@ -22,7 +23,7 @@ export default function EventCard({ event, priority = false, onSelectAction }: E
   }, [event.poster]);
 
   const handleImageError = () => {
-    console.log('Image load failed:', {
+    logger.log('Image load failed:', {
       url: event.poster,
       title: event.title,
       isValidUrl: event.poster?.includes('googleusercontent.com'),
